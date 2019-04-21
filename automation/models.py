@@ -12,35 +12,20 @@ class DeviceStandard(models.Model):                                             
 
     DevName = models.CharField(verbose_name=u'设备名称', max_length=20)
     DevType = models.CharField(verbose_name=u'设备类型', max_length=20, default=u'以太交换机')
-    SimIntro = models.TextField(u"设备的接口和电源简单介绍", null=False)
+    SimIntro = models.TextField(verbose_name=u"接口和电源", null=False)
     MAC = models.CharField(max_length=20, null=True)
-    IPV4 = models.CharField(max_length=20, null=True, blank=True)
-    IPV6 = models.CharField(max_length=20, null=True, blank=True)
-    ThroughPut = models.CharField(max_length=20, null=True)
-    PacketForwarding = models.CharField(max_length=20, null=True)
-    Queue = models.IntegerField()
-    IsDelete = models.BooleanField(default=False)           # 默认不删除
+    IPV4 = models.CharField(verbose_name=u'IPV4路由容量', max_length=20, null=True, blank=True)
+    IPV6 = models.CharField(verbose_name=u'IPV6路由容量', max_length=20, null=True, blank=True)
+    ThroughPut = models.CharField(verbose_name=u'整系统交换容量', max_length=20, null=True)
+    PacketForwarding = models.CharField(verbose_name=u'包转发率', max_length=20, null=True)
+    Queue = models.IntegerField(verbose_name=u'队列数')
+    StandardManger = models.CharField(verbose_name=u'管理员', max_length=20, null=True)
+    IsDelete = models.BooleanField(default=False)
     CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
 
     def __unicode__(self):
-        return "deviceName:"+self.DevName
-
-
-class DeviceTemplate(models.Model):                                                            # 入网模板表
-    class Meta:                                                                                # 起别名：入网模板表
-        verbose_name_plural = u'入网设备模板'
-        verbose_name = u'《入网模板》'
-    TemVersion = models.IntegerField(verbose_name=u'版本', default=2)                          # 模板版本，默认选择第二种
-    TemType = models.CharField(verbose_name=u'类型', max_length=20, default=u'以太交换机')     # 默认是以太交换机
-    TemPath = models.CharField(verbose_name=u'模板路径', max_length=20, null=True)             # 允许为null
-    TemManager = models.CharField(verbose_name=u'管理员', max_length=20, default=" ")          # 管理员创建规格信息模板
-    IsDelete = models.BooleanField(default=False)                                              # 默认不删除
-    CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
-    LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
-
-    def __unicode__(self):
-        return "deviceName:"+self.TemManager
+        return self.DevName
 
 
 class TestPartner(models.Model):
@@ -57,17 +42,4 @@ class TestPartner(models.Model):
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
 
     def __unicode__(self):
-        return "TestPartner:"+str(self.Tel)
-
-
-class DeviceSpec(models.Model):
-    class Meta:                                                                               # 起别名：设备规格参数
-        verbose_name_plural = u'设备规格参数'
-        verbose_name = u'《规格参数》'
-    SpecPath = models.CharField(u'规格参数模板路径', max_length=30)
-    IsDelete = models.BooleanField(default=False)                                             # 默认不删除
-    CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
-    LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
-
-    def __unicode__(self):
-        return "TestPartner:"+str(self.Tel)
+        return self.Tel
