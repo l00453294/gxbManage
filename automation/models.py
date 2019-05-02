@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils import timezone
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -18,8 +19,10 @@ class DeviceStandard(models.Model):                                             
     IPV6 = models.CharField(verbose_name=u'IPV6路由容量', max_length=20, null=True, blank=True)
     ThroughPut = models.CharField(verbose_name=u'整系统交换容量', max_length=20, null=True)
     PacketForwarding = models.CharField(verbose_name=u'包转发率', max_length=20, null=True)
-    Queue = models.IntegerField(verbose_name=u'队列数')
-    StandardManger = models.CharField(verbose_name=u'管理员', max_length=20, null=True)
+    Queue = models.IntegerField(verbose_name=u'队列数', default=8)
+
+    Manager = models.ForeignKey(User, related_name='user_standard', null=True, verbose_name=u'管理员',)
+
     IsDelete = models.BooleanField(default=False)
     CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
@@ -42,4 +45,4 @@ class TestPartner(models.Model):
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
 
     def __unicode__(self):
-        return self.Tel
+        return self.TestUserName

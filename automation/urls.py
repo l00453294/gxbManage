@@ -1,6 +1,5 @@
 # coding=utf-8
-from django.conf.urls import url, include
-from automation import views
+from django.conf.urls import include, url
 
 urlpatterns = [
     url(r'^$', include('automation.views'), name='index'),

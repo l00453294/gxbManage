@@ -7,4 +7,4 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return render(request, 'automation/index.html', {'login_user': request.user})
+    return render(request, 'automation/index.html', {'login_user': request.user,'username':request.GET.get('username')})
