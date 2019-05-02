@@ -2,6 +2,8 @@
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -27,6 +29,11 @@ class DeviceStandard(models.Model):                                             
     CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
 
+    def delete(self, using=None, keep_parents=False):           # 实现逻辑删除
+        self.IsDelete = True
+        print self.IsDelete
+        self.save()
+
     def __unicode__(self):
         return self.DevName
 
@@ -46,3 +53,13 @@ class TestPartner(models.Model):
 
     def __unicode__(self):
         return self.TestUserName
+
+
+# class Test(AbstractUser):
+#     Username = models.CharField(max_length=30, null=True)
+#     password = models.CharField(max_length=30, null=True)
+#     email = models.CharField(max_length=30, null=True)
+#     IsDefault = models.BooleanField(verbose_name=u'默认权限', default=False)
+#
+#     def __unicode__(self):
+#         return self.IsDefault

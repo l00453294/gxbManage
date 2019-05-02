@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 from .models import TestPartner, DeviceStandard
+
 # Register your models here.
 
 
@@ -15,6 +18,7 @@ class DeviceStandardAdmin(admin.ModelAdmin):
     date_hierarchy = 'CreateTime'
 
     def save_model(self, request, obj, form, change):
+
         if not change:                                  # 如果在创建记录则自动填充，否则不自动填充
             obj.Manager = request.user
         obj.save()
