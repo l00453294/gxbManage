@@ -10,18 +10,27 @@ from .models import TestPartner, DeviceStandard
 
 @admin.register(DeviceStandard)
 class DeviceStandardAdmin(admin.ModelAdmin):
-    list_display = ('id', 'DevName', 'DevType', 'SimIntro', 'MAC', 'IPV4', 'IPV6', 'ThroughPut', 'Queue', 'Manager')
+    list_display = ('id', 'DevName', 'DevType', 'SimIntro', 'MAC', 'IPV4', 'IPV6', 'ThroughPut', 'Queue', 'Manager',
+                    'IsDelete')
     exclude = ('Manager',)
     list_per_page = 10                                                      # 每页显示5条数据
     ordering = ['id']                                                       # 按照id排列，默认是升序
-    list_filter = ('DevName', 'DevType')                                    # 过滤器
+    list_filter = ('DevName', 'DevType', 'IsDelete')                        # 过滤器
     date_hierarchy = 'CreateTime'
+    search_fields = ['IsDelete']
 
     def save_model(self, request, obj, form, change):
 
         if not change:                                  # 如果在创建记录则自动填充，否则不自动填充
             obj.Manager = request.user
         obj.save()
+
+    def get_queryset(self, request):                                    # 仅仅显示自己创建的device
+        qs = super(DeviceStandardAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        user_id = User.objects.get(username=request.user)
+        return qs.filter(Manager_id=user_id)
 
 
 @admin.register(TestPartner)

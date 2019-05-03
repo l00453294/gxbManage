@@ -3,8 +3,6 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
-from django.contrib.auth.models import AbstractUser
-
 # Create your models here.
 
 
@@ -25,13 +23,12 @@ class DeviceStandard(models.Model):                                             
 
     Manager = models.ForeignKey(User, related_name='user_standard', null=True, verbose_name=u'管理员',)
 
-    IsDelete = models.BooleanField(default=False)
+    IsDelete = models.BooleanField(verbose_name=u'回收站', default=False)
     CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
 
     def delete(self, using=None, keep_parents=False):           # 实现逻辑删除
         self.IsDelete = True
-        print self.IsDelete
         self.save()
 
     def __unicode__(self):

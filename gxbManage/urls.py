@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from automation import views
 urlpatterns = [
-    url(r'^$', views.index),
     url(r'^admin/', admin.site.urls),
+    url(r'^automation/', include('automation.urls', namespace='index')),
+    url(r'^$', include('automation.urls', namespace='index')),
+
 ]
