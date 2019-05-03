@@ -7,6 +7,7 @@ from automation.models import TestPartner, DeviceStandard
 from django.http import HttpResponse
 from django.contrib import messages
 from django.utils.html import format_html
+import time
 # Register your models here.
 
 
@@ -37,7 +38,8 @@ class DeviceStandardAdmin(admin.ModelAdmin):
 
     # 实现了跳转功能
     def test(self, request, queryset):
-        self.message_user(request, format_html("<a href='http://www.baidu.com' target='_blank'>good</a>"))
+        # time.sleep(30)
+        self.message_user(request, format_html("<a href='http://www.baidu.com' target='_blank'>{}</a>", 'good'))
 
 
 @admin.register(TestPartner)
