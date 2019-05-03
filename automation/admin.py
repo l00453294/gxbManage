@@ -3,8 +3,10 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
-from .models import TestPartner, DeviceStandard
-
+from automation.models import TestPartner, DeviceStandard
+from django.http import HttpResponse
+from django.contrib import messages
+from django.utils.html import format_html
 # Register your models here.
 
 
@@ -18,6 +20,7 @@ class DeviceStandardAdmin(admin.ModelAdmin):
     list_filter = ('DevName', 'DevType', 'IsDelete')                        # 过滤器
     date_hierarchy = 'CreateTime'
     search_fields = ['IsDelete']
+    actions = ['test']
 
     def save_model(self, request, obj, form, change):
 
@@ -31,6 +34,10 @@ class DeviceStandardAdmin(admin.ModelAdmin):
             return qs
         user_id = User.objects.get(username=request.user)
         return qs.filter(Manager_id=user_id)
+
+    # 实现了跳转功能
+    def test(self, request, queryset):
+        self.message_user(request, format_html("<a href='http://www.baidu.com' target='_blank'>good</a>"))
 
 
 @admin.register(TestPartner)
