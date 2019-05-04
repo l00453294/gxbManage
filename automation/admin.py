@@ -15,17 +15,20 @@ import time
 class DeviceStandardAdmin(admin.ModelAdmin):
     list_display = ('id', 'DevName', 'DevType', 'SimIntro', 'MAC', 'IPV4', 'IPV6', 'ThroughPut', 'Queue', 'Manager',
                     'IsDelete')
+    list_display_links = ('DevName',)
     exclude = ('Manager',)
     list_per_page = 10                                                      # 每页显示5条数据
     ordering = ['id']                                                       # 按照id排列，默认是升序
     list_filter = ('DevName', 'DevType', 'IsDelete')                        # 过滤器
     date_hierarchy = 'CreateTime'
     search_fields = ['IsDelete']
-    actions = ['test']
+    actions = ['test', 'recycle_bin', 'undo_recycle_bin',]
+
+    def delete_model(self, request, obj):                               # 模型实例form页面实现逻辑删除
+        super(DeviceStandardAdmin, self).delete_model(request, obj)
 
     def save_model(self, request, obj, form, change):
-
-        if not change:                                  # 如果在创建记录则自动填充，否则不自动填充
+        if not change:                                                  # 如果在创建记录则自动填充，否则不自动填充
             obj.Manager = request.user
         obj.save()
 
@@ -38,8 +41,18 @@ class DeviceStandardAdmin(admin.ModelAdmin):
 
     # 实现了跳转功能
     def test(self, request, queryset):
-        # time.sleep(30)
-        self.message_user(request, format_html("<a href='http://www.baidu.com' target='_blank'>{}</a>", 'good'))
+        messages.add_message(request, messages.SUCCESS, format_html(
+            "<a href='http://www.baidu.com' target='_blank'>{}</a>", 'good'))
+
+    def recycle_bin(self, request, queryset):
+        num = queryset.update(IsDelete=True)
+        messages.add_message(request, messages.SUCCESS, str(num)+u"条记录操作成功")
+    recycle_bin.short_description = u'移至回收站'
+
+    def undo_recycle_bin(self, request, queryset):
+        num = queryset.update(IsDelete=False)
+        messages.add_message(request, messages.SUCCESS, str(num) + u"条记录操作成功")
+    undo_recycle_bin.short_description = u'还原回收站'
 
 
 @admin.register(TestPartner)

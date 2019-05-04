@@ -27,7 +27,7 @@ class DeviceStandard(models.Model):                                             
     CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
 
-    def delete(self, using=None, keep_parents=False):           # 实现逻辑删除
+    def delete(self, using=None, keep_parents=False):   # 配合delete_model函数实现模型实例form页面逻辑删除
         self.IsDelete = True
         self.save()
 
