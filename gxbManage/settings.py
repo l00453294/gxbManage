@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """
 Django settings for gxbManage project.
 
@@ -38,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'automation'
 ]
+
+# 自定义User类
+AUTH_USER_MODEL = 'automation.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,5 +133,8 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static_url/'
+STATIC_ROOT = (
+    os.path.join(BASE_DIR, 'automation/static'),
+)
 
