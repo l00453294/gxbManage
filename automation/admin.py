@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
-from automation.models import TestPartner, DeviceStandard
-from django.http import HttpResponse
+from automation.models import TestPartner, DeviceStandard, User
 from django.contrib import messages
 from django.utils.html import format_html
-import time
+from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 
 
@@ -22,7 +20,7 @@ class DeviceStandardAdmin(admin.ModelAdmin):
     list_filter = ('DevName', 'DevType', 'IsDelete')                        # 过滤器
     date_hierarchy = 'CreateTime'
     search_fields = ['IsDelete']
-    actions = ['test', 'recycle_bin', 'undo_recycle_bin',]
+    actions = ['test_action', 'recycle_bin', 'undo_recycle_bin', ]
 
     def delete_model(self, request, obj):                               # 模型实例form页面实现逻辑删除
         super(DeviceStandardAdmin, self).delete_model(request, obj)
@@ -40,7 +38,7 @@ class DeviceStandardAdmin(admin.ModelAdmin):
         return qs.filter(Manager_id=user_id)
 
     # 实现了跳转功能
-    def test(self, request, queryset):
+    def test_action(self, request, queryset):
         messages.add_message(request, messages.SUCCESS, format_html(
             "<a href='http://www.baidu.com' target='_blank'>{}</a>", 'good'))
 
@@ -59,6 +57,18 @@ class DeviceStandardAdmin(admin.ModelAdmin):
 class TestPartnerAdmin(admin.ModelAdmin):
     pass
 
+
+class UserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'NickName', )
+
+    fieldsets = (
+        (u'个人信息', {'fields': ('username', 'email')}),
+        (u'个人昵称', {'fields': ('NickName', 'password')}),
+
+    )
+
+
+admin.site.register(User, UserAdmin)
 
 admin.site.site_header = '工信部入网管理系统'
 admin.site.site_title = '工信部入网'

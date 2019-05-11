@@ -1,9 +1,20 @@
 # -*- coding: utf-8 -*-
 from django.utils import timezone
 from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User, AbstractUser
 # Create your models here.
+
+
+class User(AbstractUser):
+    NickName = models.CharField(verbose_name=u'昵称', max_length=30, null=True, blank=True)
+    is_staff = models.BooleanField(default=True)
+
+    class Meta(AbstractUser.Meta):
+        verbose_name = u'用户'
+        verbose_name_plural = verbose_name
+
+    def __unicode__(self):
+        return self.username
 
 
 class DeviceStandard(models.Model):                                                           # 设备参数表
@@ -23,7 +34,7 @@ class DeviceStandard(models.Model):                                             
 
     Manager = models.ForeignKey(User, related_name='user_standard', null=True, verbose_name=u'管理员',)
 
-    IsDelete = models.BooleanField(verbose_name=u'回收站', default=False)
+    IsDelete = models.BooleanField(verbose_name=u'移至回收站', default=False)
     CreateTime = models.DateTimeField(u'创建时间', default=timezone.now)
     LastEditTime = models.DateTimeField(u'最后修改时间', auto_now=True)
 
@@ -51,12 +62,3 @@ class TestPartner(models.Model):
     def __unicode__(self):
         return self.TestUserName
 
-
-# class Test(AbstractUser):
-#     Username = models.CharField(max_length=30, null=True)
-#     password = models.CharField(max_length=30, null=True)
-#     email = models.CharField(max_length=30, null=True)
-#     IsDefault = models.BooleanField(verbose_name=u'默认权限', default=False)
-#
-#     def __unicode__(self):
-#         return self.IsDefault
